@@ -52,6 +52,13 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/volunteerInfo/:email', async (req, res) => {
+            console.log(req.params.email);
+            const result = await volunteerCollection.find({ email: req.params.email }).toArray();
+            res.send(result)
+            // console.log(result);
+        })
+
         // modal server
         app.post('/modalInfo', async (req, res) => {
             const newUsers = req.body;
