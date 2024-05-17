@@ -66,7 +66,7 @@ const verifyToken = async (req, res, next) => {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
 
         const volunteerCollection = client.db('volunteer').collection('volunteerInfo');
@@ -116,7 +116,7 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/volunteer/:email', verifyToken, async (req, res) => {
+        app.get('/volunteer/:email', async (req, res) => {
             console.log(req.params.email);
             const email = req.params.email;
             const query = { email: email }
