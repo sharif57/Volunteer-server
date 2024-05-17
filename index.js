@@ -12,7 +12,9 @@ const port = process.env.PORT || 5000;
 //MIDDLEWARE
 app.use(cors({
     origin: [
-        'http://localhost:5173'
+        'http://localhost:5173',
+        'https://volunteer-e0eac.web.app',
+        'https://volunteer-e0eac.firebaseapp.com'
     ],
     // origin:'*',
     credentials: true
@@ -155,6 +157,7 @@ async function run() {
         })
 
 
+
         // modal server
         app.post('/modalInfo', async (req, res) => {
             const newUsers = req.body;
@@ -162,24 +165,35 @@ async function run() {
             const result = await modalCollection.insertOne(newUsers)
             res.send(result)
         })
+
+
         app.get('/modalInfo/:email', async (req, res) => {
-            const cursor = modalCollection.find();
-            const result = await cursor.toArray();
-            res.send(result)
+            // const cursor = modalCollection.find();
+            // const result = await cursor.toArray();
+            // res.send(result)
+            
+            const email = req.params.email;
+            console.log(email);
+            const result = await modalCollection.find({ email: email }).toArray();
+            console.log('length',result.length);
+            res.send(result);
+
         })
 
-        app.delete('/delete/:id', async (req, res) => {
-            // const id = req.params.id;
+        app.delete('/delete2/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
             // const query = { _id:  }
-            const result = await modalCollection.deleteOne({ _id: new ObjectId(id.params.id) })
+            const result = await modalCollection.deleteOne({ _id: new ObjectId(req.params.id) })
             res.send(result)
             console.log(result);
+
         })
 
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
